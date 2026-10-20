@@ -963,19 +963,25 @@ const minuteHand = hand(5 / 60, 13);
   }
 
   /* the header as in a mail program: one size for labels and values, every row the same
-     height with one hairline under the whole row (label included); inputs at least 16px, or
-     phones zoom in on focus */
+     height with one hairline under the whole row (label included); on touch screens 16px,
+     or phones zoom in on the inputs */
   .fields {
     display: grid;
     grid-template-columns: auto 1fr;
     margin: 0 clamp(0.9rem, 5cqi, 2rem);
-    font-size: 1rem;
+    font-size: 0.875rem;
     line-height: 1.5;
+  }
+
+  @media (pointer: coarse) {
+    .fields {
+      font-size: 1rem;
+    }
   }
 
   .fields > * {
     min-width: 0;
-    padding: 0.5em 0;
+    padding: 0.4em 0;
     border-bottom: 1px solid var(--line);
     transition: border-color 0.15s;
   }
@@ -1024,7 +1030,7 @@ const minuteHand = hand(5 / 60, 13);
   }
 
   .fields > input {
-    padding: 0.5em 0;
+    padding: 0.4em 0;
   }
 
   /* Name and E-Mail carry the row's padding themselves, so the hairline between them runs
@@ -1034,7 +1040,7 @@ const minuteHand = hand(5 / 60, 13);
   }
 
   .from input {
-    padding: 0.5em 0;
+    padding: 0.4em 0;
     border-bottom: 0;
   }
 
@@ -1108,15 +1114,25 @@ const minuteHand = hand(5 / 60, 13);
   textarea.letter {
     display: block;
     min-height: 4.4em;
+    /* room for the focus outline: it must not sit on the Betreff line or the button */
+    margin-top: 0.4rem;
+    margin-bottom: 0.9rem;
     border: 0;
     border-radius: 0;
     background: none;
     color: var(--ink);
-    font-size: clamp(1rem, 3.8cqi, 1.25rem);
+    font-size: clamp(0.9375rem, 3.6cqi, 1.125rem);
     white-space: pre-wrap;
     resize: none;
     field-sizing: content;
-    max-height: 14em;
+    max-height: 10em;
+  }
+
+  /* touch screens: 16px at least, or phones zoom in on focus */
+  @media (pointer: coarse) {
+    textarea.letter {
+      font-size: max(1rem, 3.6cqi);
+    }
   }
 
   .caret {
@@ -1150,12 +1166,12 @@ const minuteHand = hand(5 / 60, 13);
     align-items: center;
     gap: 0.5rem 1rem;
     margin: 0 clamp(0.9rem, 5cqi, 2rem) clamp(0.9rem, 5cqi, 1.75rem);
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 
   .send {
     display: inline-block;
-    padding: 0.55em 1.2em;
+    padding: 0.5em 1.1em;
     border: 2px solid var(--ink);
     background: var(--ink);
     color: var(--paper);
