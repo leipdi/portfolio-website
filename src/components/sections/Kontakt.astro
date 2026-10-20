@@ -937,11 +937,11 @@ const minuteHand = hand(5 / 60, 13);
 
   .app-bar {
     position: relative;
-    padding: 0.55em 1em;
+    padding: 0.35em 1em;
     border-bottom: 1px solid var(--line);
     background: #f6f4fa;
     border-radius: inherit;
-    font-size: clamp(0.75rem, 2.5cqi, 0.875rem);
+    font-size: 0.75rem;
     font-weight: 600;
     text-align: center;
     color: var(--ink-2);
@@ -969,7 +969,7 @@ const minuteHand = hand(5 / 60, 13);
     display: grid;
     grid-template-columns: auto 1fr;
     margin: 0 clamp(0.9rem, 5cqi, 2rem);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     line-height: 1.5;
   }
 
@@ -981,7 +981,7 @@ const minuteHand = hand(5 / 60, 13);
 
   .fields > * {
     min-width: 0;
-    padding: 0.4em 0;
+    padding: 0.25em 0;
     border-bottom: 1px solid var(--line);
     transition: border-color 0.15s;
   }
@@ -1030,7 +1030,7 @@ const minuteHand = hand(5 / 60, 13);
   }
 
   .fields > input {
-    padding: 0.4em 0;
+    padding: 0.25em 0;
   }
 
   /* Name and E-Mail carry the row's padding themselves, so the hairline between them runs
@@ -1040,7 +1040,7 @@ const minuteHand = hand(5 / 60, 13);
   }
 
   .from input {
-    padding: 0.4em 0;
+    padding: 0.25em 0;
     border-bottom: 0;
   }
 
@@ -1065,44 +1065,56 @@ const minuteHand = hand(5 / 60, 13);
     display: none;
   }
 
-  /* the narrowest screens: labels above their values, so the address keeps its line */
+  /* narrow screens (phones): the form drops the An row (the address stands large right
+     above the desk) and Name and E-Mail stack in the value column, so the labels stay beside
+     their values and the letter keeps the most room; the letter without a form stacks its
+     labels above the values instead, so the address keeps its line */
   @container (max-width: 20rem) {
-    .fields {
-      grid-template-columns: 1fr;
+    [data-form] .fields > :nth-child(-n + 2) {
+      display: none;
     }
 
-    .fields dt,
+    /* small labels on the values' baseline, the hairlines only under the values */
+    [data-form] .fields {
+      align-items: baseline;
+    }
+
     .fields .lbl {
-      padding-bottom: 0.2em;
+      padding-right: 0.75em;
       border-bottom: 0;
-      font-size: 0.8125rem;
-    }
-
-    .fields dd,
-    .fields > :is(.to, .from, input) {
-      padding-top: 0;
+      font-size: 0.75rem;
     }
 
     .from {
       flex-direction: column;
     }
 
-    .from input:first-child {
-      padding-top: 0;
-    }
-
     .from input + input {
       margin: 0;
-      padding: 0.5em 0;
+      padding-left: 0;
       border-left: 0;
       border-top: 1px solid var(--line);
+    }
+
+    dl.fields {
+      grid-template-columns: 1fr;
+    }
+
+    .fields dt {
+      padding-bottom: 0;
+      border-bottom: 0;
+      font-size: 0.75rem;
+    }
+
+    .fields dd {
+      padding-top: 0;
     }
   }
 
   .letter {
     flex: 1;
     margin: 0 clamp(0.9rem, 5cqi, 2rem);
-    padding: 0.7em 0;
+    padding: 0.4em 0;
     font-family: var(--serif);
     font-size: clamp(0.9375rem, 3.8cqi, 1.25rem);
     line-height: 1.45;
@@ -1113,10 +1125,11 @@ const minuteHand = hand(5 / 60, 13);
      written where the browser can (field-sizing), else it scrolls (at least 16px, as above) */
   textarea.letter {
     display: block;
-    min-height: 4.4em;
+    /* the letter is what the screen is for: the rest stays small so it gets the most room */
+    min-height: 8.5em;
     /* room for the focus outline: it must not sit on the Betreff line or the button */
-    margin-top: 0.4rem;
-    margin-bottom: 0.9rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
     border: 0;
     border-radius: 0;
     background: none;
@@ -1132,6 +1145,13 @@ const minuteHand = hand(5 / 60, 13);
   @media (pointer: coarse) {
     textarea.letter {
       font-size: max(1rem, 3.6cqi);
+    }
+  }
+
+  /* phones: the screen may grow taller there, so the letter gets more lines */
+  @container (max-width: 20rem) {
+    textarea.letter {
+      min-height: 11em;
     }
   }
 
@@ -1166,12 +1186,12 @@ const minuteHand = hand(5 / 60, 13);
     align-items: center;
     gap: 0.5rem 1rem;
     margin: 0 clamp(0.9rem, 5cqi, 2rem) clamp(0.9rem, 5cqi, 1.75rem);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
   }
 
   .send {
     display: inline-block;
-    padding: 0.5em 1.1em;
+    padding: 0.45em 1em;
     border: 2px solid var(--ink);
     background: var(--ink);
     color: var(--paper);
@@ -1194,13 +1214,13 @@ const minuteHand = hand(5 / 60, 13);
 
   /* the form's actions sit closer to the status and privacy lines below them */
   [data-form] .actions {
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.4rem;
   }
 
   .status,
   .note {
     margin: 0 clamp(0.9rem, 5cqi, 2rem);
-    font-size: clamp(0.8125rem, 2.8cqi, 0.9375rem);
+    font-size: 0.75rem;
     line-height: 1.4;
   }
 
@@ -1217,7 +1237,7 @@ const minuteHand = hand(5 / 60, 13);
   }
 
   .note {
-    margin-bottom: clamp(0.9rem, 5cqi, 1.75rem);
+    margin-bottom: clamp(0.6rem, 3cqi, 1rem);
     color: var(--ink-2);
   }
 
