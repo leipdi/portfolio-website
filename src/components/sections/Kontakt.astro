@@ -1,6 +1,10 @@
 ---
-import { profile, contactTopics } from "../../data/cv";
+import { profile, contactTopics, contactForm } from "../../data/cv";
 import { MONTHS } from "../../lib/dates";
+import { url } from "../../lib/url";
+
+// with a Web3Forms key the screen is a real form; without one it stays the mailto letter
+const formKey = import.meta.env.PUBLIC_WEB3FORMS_KEY || contactForm.accessKey;
 
 const [user, domain] = profile.email.split("@");
 // break only after "linkedin.com/in/", never inside the handle (it has hyphens)
@@ -65,7 +69,8 @@ const minuteHand = hand(5 / 60, 13);
      screen): the evening desk ends the page's day. Ink line drawing; the only colour is light,
      the desk lamp and through the window the sun setting behind the heliostat field of the hero.
      The visitor picks what it is about, the start of the e-mail writes itself on the laptop and
-     one button opens it in their mail program (mailto, no server). -->
+     one button sends it (since 2026-10-20 the screen is a form, posted to Web3Forms; without a
+     key in cv.ts contactForm it stays the mailto letter). -->
 <section id="kontakt" class="sec" aria-labelledby="h-kontakt">
   <div class="wrap page">
     <div class="grid">
@@ -228,20 +233,56 @@ const minuteHand = hand(5 / 60, 13);
 
         <div class="laptop">
           <div class="lid">
-            <div class="screen" data-screen>
-              <p class="app-bar"><span class="dots" aria-hidden="true"></span>Neue Nachricht</p>
-              <dl class="fields">
-                <dt>An</dt>
-                <dd>{profile.email}</dd>
-                <dt>Betreff</dt>
-                <dd data-subject>{startSubject}</dd>
-              </dl>
-              <p class="letter"><span data-body>{startBody}</span><span class="caret" aria-hidden="true"></span></p>
-              <div class="actions">
-                <a class="send" href={mailto(startSubject, startBody)} data-send>E-Mail schreiben</a>
-                <button class="copy" type="button" data-copy aria-live="polite" hidden>Adresse kopieren</button>
-              </div>
-            </div>
+            <!-- with a key the mail window is the form: it posts to Web3Forms, which forwards it
+                 to the address under "An" (without JS too, then Web3Forms shows its own thank-you
+                 page); the botcheck box is the honeypot, hidden from people, bots tick it and
+                 Web3Forms drops the message -->
+            {
+              formKey ? (
+                <form class="screen" action="https://api.web3forms.com/submit" method="POST" data-screen data-form>
+                  <p class="app-bar"><span class="dots" aria-hidden="true"></span>Neue Nachricht</p>
+                  <input type="hidden" name="access_key" value={formKey} />
+                  <input type="hidden" name="from_name" value="Kontaktformular der Website" />
+                  <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
+                  <div class="fields">
+                    <span class="lbl">An</span>
+                    <span class="to">{profile.email}</span>
+                    <span class="lbl" id="kt-from">Von</span>
+                    <span class="from" role="group" aria-labelledby="kt-from">
+                      <input name="name" placeholder="Name" aria-label="Dein Name" autocomplete="name" required />
+                      <input name="email" type="email" placeholder="E-Mail" aria-label="Deine E-Mail-Adresse" autocomplete="email" required />
+                    </span>
+                    <label class="lbl" for="kt-subject">Betreff</label>
+                    <input id="kt-subject" name="subject" value={startSubject} data-subject required />
+                  </div>
+                  <textarea class="letter" name="message" rows="4" aria-label="Nachricht" required data-body>{startBody}</textarea>
+                  <div class="actions">
+                    <button class="send" type="submit" data-submit>Senden</button>
+                    <a class="alt" href={mailto(startSubject, startBody)} data-send>Lieber im Mailprogramm</a>
+                  </div>
+                  <p class="status" role="status" data-status></p>
+                  <p class="note">
+                    Geht über Web3Forms an mich, nur für die Antwort.{" "}
+                    <a class="prose-link" href={url("/datenschutz/")}>Datenschutz</a>
+                  </p>
+                </form>
+              ) : (
+                <div class="screen" data-screen>
+                  <p class="app-bar"><span class="dots" aria-hidden="true"></span>Neue Nachricht</p>
+                  <dl class="fields">
+                    <dt>An</dt>
+                    <dd>{profile.email}</dd>
+                    <dt>Betreff</dt>
+                    <dd data-subject>{startSubject}</dd>
+                  </dl>
+                  <p class="letter"><span data-body>{startBody}</span><span class="caret" aria-hidden="true"></span></p>
+                  <div class="actions">
+                    <a class="send" href={mailto(startSubject, startBody)} data-send>E-Mail schreiben</a>
+                    <button class="copy" type="button" data-copy aria-live="polite" hidden>Adresse kopieren</button>
+                  </div>
+                </div>
+              )
+            }
           </div>
           <!-- the base seen from a little above: keyboard, trackpad, the front edge -->
           <svg class="deck" viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true">
@@ -300,7 +341,11 @@ const minuteHand = hand(5 / 60, 13);
        2026-10-09: "no function") -->
   <p class="wrap sign-off">
     <span>Stand: {stand}</span>
-    <a class="prose-link" href="#top">Nach oben</a>
+    <span class="legal-links">
+      <a class="prose-link" href={url("/impressum/")}>Impressum</a>
+      <a class="prose-link" href={url("/datenschutz/")}>Datenschutz</a>
+      <a class="prose-link" href="#top">Nach oben</a>
+    </span>
   </p>
 </section>
 
@@ -308,6 +353,8 @@ const minuteHand = hand(5 / 60, 13);
   import { reduceMotion } from "../../scripts/page";
 
   const desk = document.querySelector<HTMLElement>("[data-desk]");
+  const form = document.querySelector<HTMLFormElement>("[data-form]");
+  // the form's fields, or the letter's text (without a form key)
   const subject = document.querySelector<HTMLElement>("[data-screen] [data-subject]");
   const body = document.querySelector<HTMLElement>("[data-screen] [data-body]");
   const send = document.querySelector<HTMLAnchorElement>("[data-send]");
@@ -315,27 +362,80 @@ const minuteHand = hand(5 / 60, 13);
   const lamp = document.querySelector<HTMLButtonElement>("[data-lamp]");
   const address = send?.href.slice(7).split("?")[0] ?? "";
 
-  if (desk && subject && body && send && copy && lamp) {
-    // a picked topic writes subject and opening; the opening types itself, quickly
+  if (desk && subject && body && send && lamp) {
+    const field = (el: HTMLElement) => el as HTMLInputElement | HTMLTextAreaElement;
+    const get = (el: HTMLElement) => (form ? field(el).value : (el.textContent ?? ""));
+    const set = (el: HTMLElement, v: string) => (form ? (field(el).value = v) : (el.textContent = v));
+    const mailto = () =>
+      (send.href = `mailto:${address}?subject=${encodeURIComponent(get(subject))}&body=${encodeURIComponent(get(body))}`);
+
+    // a picked topic writes subject and opening; the opening types itself, quickly. Once the
+    // visitor has written in the letter, a topic only changes the subject
     let timer = 0;
+    let written = false;
     const write = (s: string, b: string) => {
-      subject.textContent = s;
-      send.href = `mailto:${address}?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(b)}`;
+      set(subject, s);
+      if (written) return mailto();
       clearInterval(timer);
       if (reduceMotion.matches) {
-        body.textContent = b;
-        return;
+        set(body, b);
+        return mailto();
       }
       let i = 0;
-      body.textContent = "";
+      set(body, "");
       timer = window.setInterval(() => {
-        body.textContent = b.slice(0, ++i);
-        if (i >= b.length) clearInterval(timer);
+        set(body, b.slice(0, ++i));
+        if (i >= b.length) {
+          clearInterval(timer);
+          mailto();
+        }
       }, 24);
     };
     for (const r of document.querySelectorAll<HTMLInputElement>('input[name="kontakt-topic"]'))
       r.addEventListener("change", () => write(r.dataset.subject ?? "", r.dataset.body ?? ""));
 
+    if (form) {
+      const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!;
+      const status = form.querySelector<HTMLElement>("[data-status]")!;
+      body.addEventListener("input", () => {
+        written = true;
+        clearInterval(timer);
+      });
+      // "Lieber im Mailprogramm" takes along what is written so far
+      form.addEventListener("input", mailto);
+
+      // sent in the background, the answer shown on the screen (the browser checks the
+      // required fields first)
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (form.dataset.state === "sending") return;
+        form.dataset.state = "sending";
+        submit.disabled = true;
+        status.textContent = "Wird gesendet …";
+        try {
+          const res = await fetch(form.action, {
+            method: "POST",
+            headers: { Accept: "application/json" },
+            body: new FormData(form),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.success) throw new Error(data.message);
+          form.dataset.state = "sent";
+          status.textContent = "Danke, die Nachricht ist angekommen. Ich antworte dir per E-Mail.";
+          set(body, "");
+          written = false;
+          mailto();
+        } catch {
+          form.dataset.state = "error";
+          status.textContent = `Das hat nicht geklappt. Schreib mir bitte direkt an ${address}.`;
+        } finally {
+          submit.disabled = false;
+        }
+      });
+    }
+  }
+
+  if (copy) {
     copy.hidden = false;
     let copyTimer = 0;
     copy.addEventListener("click", async () => {
@@ -348,7 +448,9 @@ const minuteHand = hand(5 / 60, 13);
       clearTimeout(copyTimer);
       copyTimer = window.setTimeout(() => (copy.textContent = "Adresse kopieren"), 1800);
     });
+  }
 
+  if (desk && lamp) {
     lamp.disabled = false;
     lamp.addEventListener("click", () => {
       const off = desk.classList.toggle("is-dark");
@@ -513,9 +615,11 @@ const minuteHand = hand(5 / 60, 13);
     container-type: inline-size;
   }
 
+  /* the laptop starts below the window's sill (the window is 33.3cqi high), so the lid never
+     runs over the sill or the plant */
   .desk {
     position: relative;
-    padding-top: 30cqi;
+    padding-top: 37cqi;
   }
 
   .ln {
@@ -625,7 +729,7 @@ const minuteHand = hand(5 / 60, 13);
     position: absolute;
     top: 0;
     right: 2cqi;
-    width: 44cqi;
+    width: 40cqi;
     height: auto;
     overflow: visible;
   }
@@ -659,7 +763,7 @@ const minuteHand = hand(5 / 60, 13);
   .lamp {
     position: absolute;
     z-index: 1;
-    top: 15cqi;
+    top: 22cqi;
     left: 1cqi;
     bottom: 17.6cqi;
     width: 30cqi;
@@ -734,9 +838,9 @@ const minuteHand = hand(5 / 60, 13);
   .mug {
     position: absolute;
     z-index: 1;
-    right: 2cqi;
+    right: 1cqi;
     bottom: 15.4cqi;
-    width: 12cqi;
+    width: 11cqi;
     height: auto;
     overflow: visible;
   }
@@ -861,6 +965,7 @@ const minuteHand = hand(5 / 60, 13);
   .fields {
     display: grid;
     grid-template-columns: auto 1fr;
+    align-items: baseline;
     gap: 0.25em 1em;
     margin: 0 clamp(0.9rem, 5cqi, 2rem);
     padding: 0.8em 0;
@@ -877,6 +982,59 @@ const minuteHand = hand(5 / 60, 13);
     overflow-wrap: break-word;
   }
 
+  /* the form's fields: the labels as in a mail program, the inputs only a hairline under the
+     text (at least 16px, or phones zoom in on focus) */
+  .fields .lbl {
+    color: var(--ink-2);
+  }
+
+  .to {
+    font-weight: 600;
+    overflow-wrap: break-word;
+  }
+
+  .from {
+    display: flex;
+    gap: 0.75em;
+    min-width: 0;
+  }
+
+  .from input {
+    flex: 1 1 0;
+  }
+
+  .fields input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.05em 0 0.1em;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: none;
+    font: inherit;
+    font-size: max(1rem, 1em);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .fields input:focus {
+    border-bottom-color: var(--ink);
+  }
+
+  .screen :is(input, textarea):focus-visible {
+    outline-offset: 2px;
+  }
+
+  .screen ::placeholder {
+    color: var(--ink-3);
+    opacity: 1;
+    font-weight: 400;
+  }
+
+  .hp {
+    display: none;
+  }
+
   /* the narrowest screens: labels above their values, so the address keeps its line */
   @container (max-width: 17.5rem) {
     .fields {
@@ -884,8 +1042,14 @@ const minuteHand = hand(5 / 60, 13);
       gap: 0;
     }
 
-    .fields dd + dt {
+    .fields dd + dt,
+    .fields .lbl:not(:first-child) {
       margin-top: 0.35em;
+    }
+
+    .from {
+      flex-direction: column;
+      gap: 0.35em;
     }
   }
 
@@ -897,6 +1061,22 @@ const minuteHand = hand(5 / 60, 13);
     font-size: clamp(0.9375rem, 3.8cqi, 1.25rem);
     line-height: 1.45;
     white-space: pre-line;
+  }
+
+  /* the letter as the form's text box: the same type, no box around it; it grows with what is
+     written where the browser can (field-sizing), else it scrolls (at least 16px, as above) */
+  textarea.letter {
+    display: block;
+    min-height: 4.4em;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--ink);
+    font-size: clamp(1rem, 3.8cqi, 1.25rem);
+    white-space: pre-wrap;
+    resize: none;
+    field-sizing: content;
+    max-height: 14em;
   }
 
   .caret {
@@ -939,8 +1119,11 @@ const minuteHand = hand(5 / 60, 13);
     border: 2px solid var(--ink);
     background: var(--ink);
     color: var(--paper);
+    font: inherit;
     font-weight: 700;
+    line-height: inherit;
     text-decoration: none;
+    cursor: pointer;
   }
 
   .send:hover {
@@ -948,7 +1131,42 @@ const minuteHand = hand(5 / 60, 13);
     border-color: var(--ink-2);
   }
 
-  .copy {
+  .send:disabled {
+    cursor: progress;
+    opacity: 0.7;
+  }
+
+  /* the form's actions sit closer to the status and privacy lines below them */
+  [data-form] .actions {
+    margin-bottom: 0.6rem;
+  }
+
+  .status,
+  .note {
+    margin: 0 clamp(0.9rem, 5cqi, 2rem);
+    font-size: clamp(0.8125rem, 2.8cqi, 0.9375rem);
+    line-height: 1.4;
+  }
+
+  .status {
+    font-weight: 600;
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  .status:not(:empty) {
+    margin-bottom: 0.4rem;
+  }
+
+  .note {
+    margin-bottom: clamp(0.9rem, 5cqi, 1.75rem);
+    color: var(--ink-2);
+  }
+
+  .copy,
+  .alt {
     padding: 0.4em 0;
     border: 0;
     background: none;
@@ -961,7 +1179,8 @@ const minuteHand = hand(5 / 60, 13);
     cursor: pointer;
   }
 
-  .copy:hover {
+  .copy:hover,
+  .alt:hover {
     text-decoration-thickness: 3px;
     text-decoration-color: var(--ink);
   }
@@ -970,13 +1189,13 @@ const minuteHand = hand(5 / 60, 13);
      close to 16:10 with the type at its floor; the mug a little smaller beside it */
   @container (max-width: 46rem) {
     .laptop {
-      width: 64cqi;
-      margin-left: 22cqi;
+      width: 62cqi;
+      margin-left: 20cqi;
     }
 
     .mug {
       right: 0.5cqi;
-      width: 10cqi;
+      width: 9.5cqi;
     }
   }
 
@@ -984,7 +1203,7 @@ const minuteHand = hand(5 / 60, 13);
      behind it, only its head over the lid, and the mug has no room */
   @container (max-width: 32rem) {
     .desk {
-      padding-top: 36cqi;
+      padding-top: 41cqi;
     }
 
     .clock {
@@ -993,7 +1212,7 @@ const minuteHand = hand(5 / 60, 13);
 
     .window {
       right: 0;
-      width: 50cqi;
+      width: 45cqi;
     }
 
     .laptop {
@@ -1006,7 +1225,7 @@ const minuteHand = hand(5 / 60, 13);
     }
 
     .lamp {
-      top: 3cqi;
+      top: 8cqi;
       left: 5cqi;
       width: 30cqi;
     }
@@ -1028,5 +1247,11 @@ const minuteHand = hand(5 / 60, 13);
     background: linear-gradient(var(--line), var(--line)) no-repeat var(--gutter) 0 / calc(100% - 2 * var(--gutter)) 1px;
     font-size: 0.9375rem;
     color: var(--ink-2);
+  }
+
+  .legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
   }
 </style>

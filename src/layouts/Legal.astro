@@ -1,0 +1,117 @@
+---
+// Impressum and Datenschutz (2026-10-20): plain text pages beside the one scrolling page. No
+// section nav (its anchors live on the home page), no day script: the page keeps its paper.
+import { url } from "../lib/url";
+import { profile } from "../data/cv";
+import "../styles/fonts.css";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const origin = Astro.site ?? Astro.url;
+const canonical = new URL(Astro.url.pathname, origin).href;
+const home = url("/");
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{`${title} | ${profile.name}`}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+    <link rel="canonical" href={canonical} />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="wrap bar-in">
+        <a class="name" href={home}>{profile.name}</a>
+        <a class="prose-link" href={`${home}#kontakt`}>Zurück zur Seite</a>
+      </div>
+    </header>
+    <main class="wrap">
+      <article class="legal">
+        <h1 class="display">{title}</h1>
+        <slot />
+      </article>
+    </main>
+  </body>
+</html>
+
+<style>
+  .bar {
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  .bar-in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    min-height: var(--top-h);
+    padding-block: 0.75rem;
+  }
+
+  .name {
+    font-family: var(--serif);
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .legal {
+    max-width: 42rem;
+    padding-block: var(--sp-section) var(--sp-block);
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
+    line-height: 1.05;
+  }
+
+  .legal :global(h2) {
+    margin-top: 2.25rem;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 1.375rem;
+    line-height: 1.2;
+  }
+
+  .legal :global(p),
+  .legal :global(ul),
+  .legal :global(address) {
+    margin-top: 0.75rem;
+    font-family: var(--serif);
+    font-size: 1.1875rem;
+    line-height: 1.55;
+    font-style: normal;
+  }
+
+  .legal :global(ul) {
+    padding-left: 1.2em;
+    list-style: disc;
+  }
+
+  .legal :global(li + li) {
+    margin-top: 0.3rem;
+  }
+
+  .legal :global(a) {
+    overflow-wrap: anywhere;
+  }
+
+  /* the address still to come: the placeholder colour, so it can't pass as done */
+  .legal :global(.ph) {
+    color: var(--ph);
+  }
+</style>

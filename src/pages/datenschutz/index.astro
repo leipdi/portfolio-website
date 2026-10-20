@@ -1,0 +1,69 @@
+---
+import Legal from "../../layouts/Legal.astro";
+import { profile } from "../../data/cv";
+import { url } from "../../lib/url";
+---
+
+<Legal title="Datenschutz" description={`Datenschutzerklärung der Website von ${profile.name}.`}>
+  <p>
+    Diese Seite ist eine private Bewerbungs- und Portfolioseite. Sie setzt keine Cookies, misst keine Besuche und
+    lädt keine Schriften oder Skripte von fremden Servern.
+  </p>
+
+  <h2>Verantwortlich</h2>
+  <address>
+    {profile.name}<br />
+    E-Mail: <a class="prose-link" href={`mailto:${profile.email}`}>{profile.email}</a>
+  </address>
+
+  <h2>Hosting</h2>
+  <p>
+    Die Seite liegt bei GitHub Pages (GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA).
+    Beim Aufruf verarbeitet GitHub technisch nötige Daten, darunter Ihre IP-Adresse, Datum und Uhrzeit des Aufrufs
+    und den Browser, um die Seite auszuliefern und vor Missbrauch zu schützen. Rechtsgrundlage ist mein berechtigtes
+    Interesse an einer sicheren Auslieferung (Art. 6 Abs. 1 lit. f DSGVO). Dabei können Daten in die USA übertragen
+    werden; GitHub stützt sich dafür auf das EU-US Data Privacy Framework. Mehr dazu in der
+    <a class="prose-link" href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement"
+      >Datenschutzerklärung von GitHub</a
+    >.
+  </p>
+
+  <h2>Kontaktformular</h2>
+  <p>
+    Wenn Sie das Formular unter <a class="prose-link" href={`${url("/")}#kontakt`}>Kontakt</a> abschicken, gehen
+    Name, E-Mail-Adresse, Betreff und Nachricht an den Dienst Web3Forms, der sie an mein E-Mail-Postfach weiterleitet.
+    Ich nutze die Angaben nur, um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, wenn
+    es um eine Stelle oder ein Projekt geht, sonst mein berechtigtes Interesse, Nachrichten zu beantworten
+    (Art. 6 Abs. 1 lit. f DSGVO). Wie Web3Forms mit den Daten umgeht, steht in der
+    <a class="prose-link" href="https://web3forms.com/privacy">Datenschutzerklärung von Web3Forms</a>. Das Formular
+    setzt keine Cookies.
+  </p>
+
+  <h2>E-Mail</h2>
+  <p>
+    Nachrichten per Formular oder E-Mail landen in meinem Postfach bei Microsoft (Outlook.com). Ich lösche sie, wenn
+    die Anfrage erledigt ist, es sei denn, ich muss sie aus gesetzlichen Gründen aufbewahren.
+  </p>
+
+  <h2>Speicher im Browser</h2>
+  <p>
+    Das 3D-Regal unter Hobbys merkt sich für die Dauer der Sitzung eine technische Einstellung (die Bildschärfe, mit
+    der es flüssig läuft) im Session Storage Ihres Browsers. Sie verlässt Ihr Gerät nicht und ist gelöscht, sobald
+    Sie den Tab schließen.
+  </p>
+
+  <h2>Ihre Rechte</h2>
+  <p>Sie haben das Recht auf</p>
+  <ul>
+    <li>Auskunft über die Daten, die ich über Sie verarbeite (Art. 15 DSGVO),</li>
+    <li>Berichtigung (Art. 16) und Löschung (Art. 17),</li>
+    <li>Einschränkung der Verarbeitung (Art. 18) und Datenübertragbarkeit (Art. 20),</li>
+    <li>Widerspruch gegen eine Verarbeitung aus berechtigtem Interesse (Art. 21).</li>
+  </ul>
+  <p>
+    Eine E-Mail an mich genügt. Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren, zum
+    Beispiel bei der Landesbeauftragten für Datenschutz und Informationsfreiheit Nordrhein-Westfalen.
+  </p>
+
+  <p>Stand: Oktober 2026</p>
+</Legal>

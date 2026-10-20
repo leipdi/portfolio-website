@@ -22,8 +22,19 @@ export const profile = {
   linkedinUrl: "https://linkedin.com/in/daniel-lenski-de",
 };
 
-// Kontakt (seit 2026-10-11): "Worum geht's?" Die Wahl schreibt Betreff und Anfang der E-Mail
-// auf den Laptop-Bildschirm; "E-Mail schreiben" öffnet sie im Mailprogramm (mailto).
+// Kontaktformular (seit 2026-10-20): der Laptop-Bildschirm schickt die Nachricht über Web3Forms
+// (web3forms.com) an profile.email. accessKey = der Access Key von dort; er ist öffentlich (steht
+// im Seitenquelltext), kein Geheimnis. Leer = der Bildschirm bleibt der mailto-Brief von vorher.
+// Für Tests ohne echten Key: PUBLIC_WEB3FORMS_KEY=test npm run build.
+export const contactForm = {
+  accessKey: "77ecdf39-3a2d-452d-992f-0de9b70289b5",
+};
+
+// Impressum (§ 5 DDG): eine ladungsfähige Anschrift, kein Postfach. null = Platzhalter auf der Seite.
+export const legal: { street: string; city: string } | null = null;
+
+// Kontakt (seit 2026-10-11): "Worum geht's?" Die Wahl schreibt Betreff und Anfang der Nachricht
+// auf den Laptop-Bildschirm (das Formular, ohne Key der mailto-Brief).
 export const contactTopics: { id: string; label: string; subject: string; body: string }[] = [
   { id: "stelle", label: "Eine Stelle", subject: "Eine Stelle", body: "Hallo Daniel,\n\nwir suchen gerade jemanden für " },
   { id: "projekt", label: "Ein Projekt", subject: "Ein Projekt", body: "Hallo Daniel,\n\nich arbeite an einem Projekt und " },

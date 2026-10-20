@@ -1,0 +1,35 @@
+---
+import Legal from "../../layouts/Legal.astro";
+import { profile, legal } from "../../data/cv";
+import { url } from "../../lib/url";
+---
+
+<Legal title="Impressum" description={`Impressum der Website von ${profile.name}.`}>
+  <h2>Angaben gemäß § 5 DDG</h2>
+  <address>
+    {profile.name}<br />
+    {
+      legal ? (
+        <>
+          {legal.street}
+          <br />
+          {legal.city}
+        </>
+      ) : (
+        <span class="ph">[Anschrift folgt: Straße und Hausnummer, PLZ und Ort]</span>
+      )
+    }
+  </address>
+
+  <h2>Kontakt</h2>
+  <p>
+    E-Mail: <a class="prose-link" href={`mailto:${profile.email}`}>{profile.email}</a><br />
+    Oder über das <a class="prose-link" href={`${url("/")}#kontakt`}>Kontaktformular</a>.
+  </p>
+
+  <h2>Haftung für Links</h2>
+  <p>
+    Die Seite verlinkt auf Angebote anderer (zum Beispiel LinkedIn). Für deren Inhalte sind ihre Betreiber
+    verantwortlich. Werde ich auf rechtswidrige Inhalte hingewiesen, entferne ich den Link.
+  </p>
+</Legal>
