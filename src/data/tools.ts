@@ -1,6 +1,6 @@
-// Software shown in the skill hub and the Projekte facts: every tool gets a logo. Where no freely licensed logo
-// exists (see src/assets/logos/LICENSES.md), `mono` is a monogram tile rendered as a marked
-// logo placeholder until the owner adds the real logo.
+// Software shown in the skill hub and the Projekte facts: every tool gets a logo (sources in
+// src/assets/logos/LICENSES.md). `mono` is a monogram tile rendered as a marked logo placeholder,
+// for a new tool until its logo is found; since 2026-10-20 no tool uses it.
 import powerbi from "../assets/logos/powerbi.svg?raw";
 import excel from "../assets/logos/excel.svg?raw";
 import sap from "../assets/logos/sap.svg?raw";
@@ -12,6 +12,11 @@ import tailwind from "../assets/logos/tailwind.svg?raw";
 import threejs from "../assets/logos/threejs.svg?raw";
 import playwright from "../assets/logos/playwright.svg?raw";
 import githubpages from "../assets/logos/githubpages.svg?raw";
+import timebutler from "../assets/logos/timebutler.svg?raw";
+import copilot from "../assets/logos/copilot.svg?raw";
+import infor from "../assets/logos/infor.svg?raw";
+import costing24 from "../assets/logos/costing24.svg?raw";
+import witness from "../assets/logos/witness.svg?raw";
 
 export type Tool = { name: string; svg?: string; mono?: string };
 
@@ -24,13 +29,14 @@ export const tools: Record<string, Tool> = {
   Claude: { name: "Claude", svg: claude },
   // same name as the CV self-rating in Kenntnisse
   MSSQL: { name: "MSSQL", svg: mssql },
-  Timebutler: { name: "Timebutler", mono: "T" },
+  Timebutler: { name: "Timebutler", svg: timebutler },
   // non-breaking space: wraps as "Copilot in / Power BI", never leaves "BI" alone
-  "Copilot in Power BI": { name: "Copilot in Power BI", mono: "Co" },
+  "Copilot in Power BI": { name: "Copilot in Power BI", svg: copilot },
   // the Projekte facts (2026-10-15); keys as in cv.ts `projects[].tools`
-  "Infor (ERP)": { name: "Infor (ERP)", mono: "In" },
-  Costing24: { name: "Costing24", mono: "C" },
-  Witness: { name: "Witness", mono: "W" },
+  "Infor (ERP)": { name: "Infor (ERP)", svg: infor },
+  Costing24: { name: "Costing24", svg: costing24 },
+  // Witness belongs to Twinn by Haskoning today: its star, captioned with the product name
+  Witness: { name: "Witness", svg: witness },
   "Claude Code": { name: "Claude Code", svg: claude },
   Astro: { name: "Astro", svg: astro },
   "Tailwind CSS": { name: "Tailwind CSS", svg: tailwind },

@@ -123,7 +123,7 @@ export const career: CareerEntry[] = [
     place: "Langenfeld",
     kind: "beruf",
     story:
-      "Die IGH Infotec AG bietet SAP-Add on Softwarelösungen für die Produktion und Logistik an. Schwerpunkt liegt bei der Visualisierung von Maschinendaten.",
+      "Die IGH Infotec AG bietet SAP-Add-on-Softwarelösungen für die Produktion und Logistik an. Der Schwerpunkt liegt auf der Visualisierung von Maschinendaten.",
   },
   {
     from: "Feb 2023",
@@ -131,8 +131,8 @@ export const career: CareerEntry[] = [
     id: "werkstudent-controlling",
     tasks: [
       "Mitarbeitercontrolling und Monatsabschlüsse in Excel und Pivot-Tabellen",
-      "Timebutler als neues Zeiterfassungssystem eingeführt. Die Kolleg:innen auf das neue System geschult",
-      "Operative Aufgaben im Tagesgeschäft. Rechnungen überprüft und eingescannt, offene Forderungen nachgehalten.",
+      "Timebutler als neues Zeiterfassungssystem eingeführt und die Kolleg:innen darauf geschult",
+      "Operative Aufgaben im Tagesgeschäft: Rechnungen überprüft und eingescannt, offene Forderungen nachgehalten",
     ],
     short: "Werkstudent Controlling",
     title: "Werkstudent Finanzen & Controlling",
