@@ -33,7 +33,7 @@ const srcset = (s: ProjectStep) =>
               <img
                 src={src(s.img.id)}
                 srcset={srcset(s)}
-                sizes="(min-width: 56rem) 55vw, 100vw"
+                sizes="(min-width: 56rem) clamp(450px, 33vw, 650px), min(100vw - 40px, 704px)"
                 alt={s.img.alt}
                 width={s.img.width}
                 height={s.img.height}

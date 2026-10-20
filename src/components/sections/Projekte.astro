@@ -90,7 +90,7 @@ const icons = {
               <img
                 src={url(`/img/projekte/${p.beside.id}.webp`)}
                 srcset={p.beside.small ? `${url(`/img/projekte/${p.beside.id}-640.webp`)} 640w, ${url(`/img/projekte/${p.beside.id}.webp`)} ${p.beside.width}w` : undefined}
-                sizes="(min-width: 56rem) 30vw, 100vw"
+                sizes="(min-width: 56rem) clamp(320px, 15vw, 380px), min(100vw - 40px, 576px)"
                 alt={p.beside.alt}
                 width={p.beside.width}
                 height={p.beside.height}

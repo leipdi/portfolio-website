@@ -17,9 +17,9 @@ const displayTitle = (t: string) => titleBreaks[t] ?? t;
 // showed as a rectangle on the wide panel's white-to-ground gradient). `bg`: the
 // picture's own ground colour, so the panel matches it (no visible rectangle), and the
 // picture then stands centred in the panel instead of at its top
-// srcset: every picture also comes 800px wide (shown at most 42rem, so a 1x screen
-// takes the small one) and 1200px (2x screens and phones; its alpha is lossy at 70, the
-// full size's would save the same but is kept as published)
+// srcset: every picture also comes 800px and 1200px wide (1x screens take 800, phones and
+// 2x screens 1200; its alpha is lossy at 70, invisible). sizes follows the measured width:
+// 300px on phones, about 38% of the window from 56rem (40vw: at 1440 a 2x screen still takes 1200)
 const arts: Record<TopSkillId, { src: string; srcset?: string; alt: string; w: number; h: number; bg?: string }> = {
   kosten: {
     bg: "#f4f8fb",
@@ -127,7 +127,7 @@ const icons: Record<TopSkillId, string> = {
                 )}
               </div>
               <div class:list={["sheet-pic", arts[s.id].bg && "is-own"]} data-kk-fade style={arts[s.id].bg ? `--pic-bg:${arts[s.id].bg};--pic-pos:50% 50%` : undefined}>
-                <img src={arts[s.id].src} srcset={arts[s.id].srcset} sizes={arts[s.id].srcset ? "(min-width: 56rem) min(42rem, 45vw), min(100vw, 24rem)" : undefined} alt={arts[s.id].alt} width={arts[s.id].w} height={arts[s.id].h} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+                <img src={arts[s.id].src} srcset={arts[s.id].srcset} sizes={arts[s.id].srcset ? "(min-width: 56rem) 40vw, min(100vw - 72px, 300px)" : undefined} alt={arts[s.id].alt} width={arts[s.id].w} height={arts[s.id].h} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
                 <span class="ai-tag">Generiert mit KI</span>
               </div>
             </li>
