@@ -962,40 +962,38 @@ const minuteHand = hand(5 / 60, 13);
       2em 0 #cdd3db;
   }
 
+  /* the header as in a mail program: one size for labels and values, every row the same
+     height with one hairline under the whole row (label included); inputs at least 16px, or
+     phones zoom in on focus */
   .fields {
     display: grid;
     grid-template-columns: auto 1fr;
-    align-items: baseline;
-    gap: 0.25em 1em;
     margin: 0 clamp(0.9rem, 5cqi, 2rem);
-    padding: 0.8em 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .fields > * {
+    min-width: 0;
+    padding: 0.5em 0;
     border-bottom: 1px solid var(--line);
-    font-size: clamp(0.8125rem, 3.2cqi, 1rem);
+    transition: border-color 0.15s;
   }
 
-  .fields dt {
-    color: var(--ink-2);
-  }
-
-  .fields dd {
-    font-weight: 600;
-    overflow-wrap: break-word;
-  }
-
-  /* the form's fields: the labels as in a mail program, the inputs only a hairline under the
-     text (at least 16px, or phones zoom in on focus) */
+  .fields dt,
   .fields .lbl {
+    padding-right: 1em;
     color: var(--ink-2);
   }
 
+  .fields dd,
   .to {
-    font-weight: 600;
+    font-weight: 500;
     overflow-wrap: break-word;
   }
 
   .from {
     display: flex;
-    gap: 0.75em;
     min-width: 0;
   }
 
@@ -1003,21 +1001,48 @@ const minuteHand = hand(5 / 60, 13);
     flex: 1 1 0;
   }
 
+  /* Name and E-Mail share the row, a hairline between them */
+  .from input + input {
+    margin-left: 0.75em;
+    padding-left: 0.75em;
+    border-left: 1px solid var(--line);
+  }
+
   .fields input {
     width: 100%;
     min-width: 0;
-    padding: 0.05em 0 0.1em;
+    height: auto;
+    margin: 0;
     border: 0;
     border-bottom: 1px solid var(--line);
     border-radius: 0;
     background: none;
     font: inherit;
-    font-size: max(1rem, 1em);
-    font-weight: 600;
+    font-weight: 500;
+    line-height: inherit;
     color: var(--ink);
   }
 
-  .fields input:focus {
+  .fields > input {
+    padding: 0.5em 0;
+  }
+
+  /* Name and E-Mail carry the row's padding themselves, so the hairline between them runs
+     the full row height */
+  .fields > .from {
+    padding: 0;
+  }
+
+  .from input {
+    padding: 0.5em 0;
+    border-bottom: 0;
+  }
+
+  /* the row being written in gets an ink line, under its label too */
+  .fields > input:focus,
+  .from:focus-within,
+  .fields > :has(+ input:focus),
+  .fields > :has(+ .from:focus-within) {
     border-bottom-color: var(--ink);
   }
 
@@ -1028,7 +1053,6 @@ const minuteHand = hand(5 / 60, 13);
   .screen ::placeholder {
     color: var(--ink-3);
     opacity: 1;
-    font-weight: 400;
   }
 
   .hp {
@@ -1036,20 +1060,36 @@ const minuteHand = hand(5 / 60, 13);
   }
 
   /* the narrowest screens: labels above their values, so the address keeps its line */
-  @container (max-width: 17.5rem) {
+  @container (max-width: 20rem) {
     .fields {
       grid-template-columns: 1fr;
-      gap: 0;
     }
 
-    .fields dd + dt,
-    .fields .lbl:not(:first-child) {
-      margin-top: 0.35em;
+    .fields dt,
+    .fields .lbl {
+      padding-bottom: 0.2em;
+      border-bottom: 0;
+      font-size: 0.8125rem;
+    }
+
+    .fields dd,
+    .fields > :is(.to, .from, input) {
+      padding-top: 0;
     }
 
     .from {
       flex-direction: column;
-      gap: 0.35em;
+    }
+
+    .from input:first-child {
+      padding-top: 0;
+    }
+
+    .from input + input {
+      margin: 0;
+      padding: 0.5em 0;
+      border-left: 0;
+      border-top: 1px solid var(--line);
     }
   }
 
@@ -1110,12 +1150,12 @@ const minuteHand = hand(5 / 60, 13);
     align-items: center;
     gap: 0.5rem 1rem;
     margin: 0 clamp(0.9rem, 5cqi, 2rem) clamp(0.9rem, 5cqi, 1.75rem);
-    font-size: clamp(0.875rem, 3.2cqi, 1rem);
+    font-size: 0.9375rem;
   }
 
   .send {
     display: inline-block;
-    padding: 0.7em 1.15em;
+    padding: 0.55em 1.2em;
     border: 2px solid var(--ink);
     background: var(--ink);
     color: var(--paper);
