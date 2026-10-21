@@ -1,0 +1,13 @@
+---
+// GitHub Pages serves dist/404.html for every unknown path (under the base path too)
+import Legal from "../layouts/Legal.astro";
+import { profile } from "../data/cv";
+import { url } from "../lib/url";
+---
+
+<Legal title="Seite nicht gefunden" description={`Diese Seite gibt es auf der Website von ${profile.name} nicht.`} noindex>
+  <p>
+    Diese Adresse gibt es hier nicht (mehr). Alles Wichtige steht auf der
+    <a class="prose-link" href={url("/")}>Startseite</a>.
+  </p>
+</Legal>

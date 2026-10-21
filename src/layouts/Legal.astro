@@ -1,5 +1,5 @@
 ---
-// Impressum and Datenschutz (2026-10-20): plain text pages beside the one scrolling page. No
+// Impressum and Datenschutz (2026-10-20), the 404 page (2026-10-21): plain text pages beside the one scrolling page. No
 // section nav (its anchors live on the home page), no day script: the page keeps its paper.
 import { url } from "../lib/url";
 import { profile } from "../data/cv";
@@ -9,9 +9,10 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
+  noindex?: boolean; // the 404 page: no canonical, kept out of search
 }
 
-const { title, description } = Astro.props;
+const { title, description, noindex = false } = Astro.props;
 const origin = Astro.site ?? Astro.url;
 const canonical = new URL(Astro.url.pathname, origin).href;
 const home = url("/");
@@ -26,7 +27,7 @@ const home = url("/");
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light" />
     <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
   </head>
   <body>
     <header class="bar">
@@ -110,8 +111,4 @@ const home = url("/");
     overflow-wrap: anywhere;
   }
 
-  /* the address still to come: the placeholder colour, so it can't pass as done */
-  .legal :global(.ph) {
-    color: var(--ph);
-  }
 </style>

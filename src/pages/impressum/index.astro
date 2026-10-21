@@ -1,25 +1,12 @@
 ---
 import Legal from "../../layouts/Legal.astro";
-import { profile, legal } from "../../data/cv";
+import { profile } from "../../data/cv";
 import { url } from "../../lib/url";
 ---
 
 <Legal title="Impressum" description={`Impressum der Website von ${profile.name}.`}>
-  <h2>Angaben gemäß § 5 DDG</h2>
-  <address>
-    {profile.name}<br />
-    {
-      legal ? (
-        <>
-          {legal.street}
-          <br />
-          {legal.city}
-        </>
-      ) : (
-        <span class="ph">[Anschrift folgt: Straße und Hausnummer, PLZ und Ort]</span>
-      )
-    }
-  </address>
+  <h2>Verantwortlich</h2>
+  <p>{profile.name}</p>
 
   <h2>Kontakt</h2>
   <p>

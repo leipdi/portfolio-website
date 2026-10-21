@@ -373,7 +373,15 @@ const minuteHand = hand(5 / 60, 13);
     // visitor has written in the letter, a topic only changes the subject
     let timer = 0;
     let written = false;
+    // a new draft clears the answer to the last one (not while sending)
+    const status = form?.querySelector<HTMLElement>("[data-status]");
+    const clearStatus = () => {
+      if (!form || !status || form.dataset.state === "sending") return;
+      delete form.dataset.state;
+      status.textContent = "";
+    };
     const write = (s: string, b: string) => {
+      clearStatus();
       set(subject, s);
       if (written) return mailto();
       clearInterval(timer);
@@ -396,11 +404,11 @@ const minuteHand = hand(5 / 60, 13);
 
     if (form) {
       const submit = form.querySelector<HTMLButtonElement>("[data-submit]")!;
-      const status = form.querySelector<HTMLElement>("[data-status]")!;
       body.addEventListener("input", () => {
         written = true;
         clearInterval(timer);
       });
+      form.addEventListener("input", clearStatus);
       // "Lieber im Mailprogramm" takes along what is written so far
       form.addEventListener("input", mailto);
 
@@ -411,7 +419,7 @@ const minuteHand = hand(5 / 60, 13);
         if (form.dataset.state === "sending") return;
         form.dataset.state = "sending";
         submit.disabled = true;
-        status.textContent = "Wird gesendet …";
+        status!.textContent = "Wird gesendet …";
         try {
           const res = await fetch(form.action, {
             method: "POST",
@@ -421,13 +429,13 @@ const minuteHand = hand(5 / 60, 13);
           const data = await res.json().catch(() => ({}));
           if (!res.ok || !data.success) throw new Error(data.message);
           form.dataset.state = "sent";
-          status.textContent = "Danke, die Nachricht ist angekommen. Ich antworte dir per E-Mail.";
+          status!.textContent = "Danke, die Nachricht ist angekommen. Ich antworte dir per E-Mail.";
           set(body, "");
           written = false;
           mailto();
         } catch {
           form.dataset.state = "error";
-          status.textContent = `Das hat nicht geklappt. Schreib mir bitte direkt an ${address}.`;
+          status!.textContent = `Das hat nicht geklappt. Schreib mir bitte direkt an ${address}.`;
         } finally {
           submit.disabled = false;
         }

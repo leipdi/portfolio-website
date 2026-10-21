@@ -30,9 +30,6 @@ export const contactForm = {
   accessKey: "77ecdf39-3a2d-452d-992f-0de9b70289b5",
 };
 
-// Impressum (§ 5 DDG): eine ladungsfähige Anschrift, kein Postfach. null = Platzhalter auf der Seite.
-export const legal: { street: string; city: string } | null = null;
-
 // Kontakt (seit 2026-10-11): "Worum geht's?" Die Wahl schreibt Betreff und Anfang der Nachricht
 // auf den Laptop-Bildschirm (das Formular, ohne Key der mailto-Brief).
 export const contactTopics: { id: string; label: string; subject: string; body: string }[] = [
