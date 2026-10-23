@@ -233,7 +233,7 @@ export const career: CareerEntry[] = [
     short: "Digital Transformation",
     title: "Praktikum Digital Transformation",
     org: "KOMAcons GmbH",
-    place: "Langenfeld",
+    place: "Leverkusen",
     kind: "beruf",
     story:
       "Die Prozesse eines kleinen Unternehmens über das ERP-System Odoo digitalisieren, dazu ein passendes KI-System einführen und klären, wo es sinnvoll hilft.",
